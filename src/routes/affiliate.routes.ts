@@ -18,12 +18,11 @@ router.get("/", index);
 router.get("/create", createForm);
 router.post("/", createAction);
 
-router.post("/:id/simulate", simulateDiscount);
-
-router.post("/:id/delete", deleteAction);
-
 router.get("/:id/edit", editForm);
 router.post("/:id/edit", editAction);
+
+router.post("/:id/delete", deleteAction);
+router.post("/:id/simulate", simulateDiscount);
 
 router.get("/:id", show);
 

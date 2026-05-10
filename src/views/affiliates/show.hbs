@@ -1,41 +1,46 @@
-<h1>Detalle del afiliado</h1>
+<h1 class="mb-3">Detalle del afiliado</h1>
 
-<p><strong>ID:</strong> {{affiliate.id}}</p>
-<p><strong>Nombre:</strong> {{affiliate.firstName}}</p>
-<p><strong>Apellido:</strong> {{affiliate.lastName}}</p>
-<p><strong>Email:</strong> {{affiliate.email}}</p>
-<p><strong>Afiliación:</strong> {{affiliate.membershipType}}</p>
-<br><br>
+<div class="mb-4">
+    <p><strong>ID:</strong> {{affiliate.id}}</p>
+    <p><strong>Nombre:</strong> {{affiliate.firstName}}</p>
+    <p><strong>Apellido:</strong> {{affiliate.lastName}}</p>
+    <p><strong>Email:</strong> {{affiliate.email}}</p>
+    <p><strong>Afiliación:</strong> {{affiliate.membershipType}}</p>
+</div>
+
+<div class="mb-4">
+    <a class="btn btn-secondary" href="/affiliates">Volver al listado</a>
+
+    <a class="btn btn-warning" href="/affiliates/{{affiliate.id}}/edit">
+        Editar afiliado
+    </a>
+</div>
+
+<form action="/affiliates/{{affiliate.id}}/delete" method="POST" class="mb-4">
+    <button class="btn btn-danger" type="submit">
+        Eliminar afiliado
+    </button>
+</form>
+
 <hr>
 
-<h2>Simulador de descuento</h2>
+<h2 class="mb-3">Simulador de descuento</h2>
 
-<form action="/affiliates/{{affiliate.id}}/simulate" method="POST">
+<form action="/affiliates/{{affiliate.id}}/simulate" method="POST" class="mb-3">
+    <div class="mb-3">
+        <label class="form-label">Monto tratamiento:</label>
 
-    <label>Monto tratamiento:</label>
+        <input class="form-control" type="number" name="amount" required>
+    </div>
 
-    <input type="number" name="amount" required>
-
-    <button type="submit">
+    <button class="btn btn-primary" type="submit">
         Calcular
     </button>
-
 </form>
-
-<a href="/affiliates/{{affiliate.id}}/edit">
-    Editar afiliado
-</a>
-<form action="/affiliates/{{affiliate.id}}/delete" method="POST">
-    <button type="submit">Eliminar afiliado</button>
-</form>
-
-<a href="/affiliates">Volver al listado</a>
 
 {{#if finalPrice}}
-
-<p>
+<div class="alert alert-success">
     Precio final con descuento:
     <strong>${{finalPrice}}</strong>
-</p>
-
+</div>
 {{/if}}

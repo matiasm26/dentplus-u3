@@ -1,15 +1,22 @@
-<h1>Afiliados DentPlus</h1>
-<a href="/affiliates/create">Crear nuevo afiliado</a>
+<h1 class="mb-3">Afiliados DentPlus</h1>
 
-<a href="/">Volver al inicio</a>
+<div class="mb-3">
+    <a class="btn btn-primary" href="/affiliates/create">Crear nuevo afiliado</a>
+    <a class="btn btn-secondary" href="/">Volver al inicio</a>
+</div>
 
-<ul>
-  {{#each affiliates}}
-    <li>
-      {{firstName}} {{lastName}} - {{membershipType}}
-      <a href="/affiliates/{{id}}">Ver detalle</a>
+<ul class="list-group">
+    {{#each affiliates}}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+            {{firstName}} {{lastName}} - <strong>{{membershipType}}</strong>
+        </span>
+
+        <a class="btn btn-sm btn-outline-primary" href="/affiliates/{{id}}">
+            Ver detalle
+        </a>
     </li>
-  {{else}}
-    <li>No hay afiliados registrados.</li>
-  {{/each}}
+    {{else}}
+    <li class="list-group-item">No hay afiliados registrados.</li>
+    {{/each}}
 </ul>

@@ -1,48 +1,39 @@
-<h1>Editar afiliado</h1>
+<h1 class="mb-3">Editar afiliado</h1>
 
 <form action="/affiliates/{{affiliate.id}}/edit" method="POST">
+    <div class="mb-3">
+        <label class="form-label">Nombre:</label>
 
-    <div>
-        <label>Nombre:</label>
-        <input type="text" name="firstName" value="{{affiliate.firstName}}" required>
+        <input class="form-control" type="text" name="firstName" value="{{affiliate.firstName}}" required>
     </div>
 
-    <div>
-        <label>Apellido:</label>
-        <input type="text" name="lastName" value="{{affiliate.lastName}}" required>
+    <div class="mb-3">
+        <label class="form-label">Apellido:</label>
+
+        <input class="form-control" type="text" name="lastName" value="{{affiliate.lastName}}" required>
     </div>
 
-    <div>
-        <label>Email:</label>
-        <input type="email" name="email" value="{{affiliate.email}}" required>
+    <div class="mb-3">
+        <label class="form-label">Email:</label>
+
+        <input class="form-control" type="email" name="email" value="{{affiliate.email}}" required>
     </div>
 
-    <div>
-        <label>Tipo afiliación:</label>
+    <div class="mb-3">
+        <label class="form-label">Tipo afiliación:</label>
 
-        <select name="membershipType">
-
-            <option value="silver">
-                Silver
-            </option>
-
-            <option value="gold">
-                Gold
-            </option>
-
-            <option value="platinum">
-                Platinum
-            </option>
-
+        <select class="form-select" name="membershipType">
+            <option value="silver">Silver</option>
+            <option value="gold">Gold</option>
+            <option value="platinum">Platinum</option>
         </select>
     </div>
 
-    <button type="submit">
+    <button class="btn btn-primary" type="submit">
         Guardar cambios
     </button>
 
+    <a class="btn btn-secondary" href="/affiliates/{{affiliate.id}}">
+        Volver al detalle
+    </a>
 </form>
-
-<a href="/affiliates/{{affiliate.id}}">
-    Volver al detalle
-</a>
