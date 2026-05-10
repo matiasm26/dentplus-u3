@@ -6,6 +6,21 @@
 <p><strong>Email:</strong> {{affiliate.email}}</p>
 <p><strong>Afiliación:</strong> {{affiliate.membershipType}}</p>
 <br><br>
+<hr>
+
+<h2>Simulador de descuento</h2>
+
+<form action="/affiliates/{{affiliate.id}}/simulate" method="POST">
+
+    <label>Monto tratamiento:</label>
+
+    <input type="number" name="amount" required>
+
+    <button type="submit">
+        Calcular
+    </button>
+
+</form>
 
 <a href="/affiliates/{{affiliate.id}}/edit">
     Editar afiliado
@@ -15,3 +30,12 @@
 </form>
 
 <a href="/affiliates">Volver al listado</a>
+
+{{#if finalPrice}}
+
+<p>
+    Precio final con descuento:
+    <strong>${{finalPrice}}</strong>
+</p>
+
+{{/if}}

@@ -1,69 +1,91 @@
 export type MembershipType = "silver" | "gold" | "platinum";
 
 export interface Affiliate {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  membershipType: MembershipType;
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    membershipType: MembershipType;
 }
 
 let affiliates: Affiliate[] = [
-  {
-    id: 1,
-    firstName: "Ana",
-    lastName: "Pérez",
-    email: "ana@correo.com",
-    membershipType: "silver"
-  },
-  {
-    id: 2,
-    firstName: "Carlos",
-    lastName: "Muñoz",
-    email: "carlos@correo.com",
-    membershipType: "gold"
-  }
+    {
+        id: 1,
+        firstName: "Ana",
+        lastName: "Pérez",
+        email: "ana@correo.com",
+        membershipType: "silver"
+    },
+    {
+        id: 2,
+        firstName: "Carlos",
+        lastName: "Muñoz",
+        email: "carlos@correo.com",
+        membershipType: "gold"
+    }
 ];
 
 let nextId = 3;
 
 export function getAll(): Affiliate[] {
-  return affiliates;
+    return affiliates;
 }
 
 export function getById(id: number): Affiliate | undefined {
-  return affiliates.find((affiliate) => affiliate.id === id);
+    return affiliates.find((affiliate) => affiliate.id === id);
 }
 
 export function create(data: Omit<Affiliate, "id">): Affiliate {
-  const newAffiliate: Affiliate = {
-    id: nextId++,
-    ...data
-  };
+    const newAffiliate: Affiliate = {
+        id: nextId++,
+        ...data
+    };
 
-  affiliates.push(newAffiliate);
-  return newAffiliate;
+    affiliates.push(newAffiliate);
+    return newAffiliate;
 }
 
 export function update(id: number, data: Omit<Affiliate, "id">): Affiliate | undefined {
-  const affiliate = getById(id);
+    const affiliate = getById(id);
 
-  if (!affiliate) {
-    return undefined;
-  }
+    if (!affiliate) {
+        return undefined;
+    }
 
-  affiliate.firstName = data.firstName;
-  affiliate.lastName = data.lastName;
-  affiliate.email = data.email;
-  affiliate.membershipType = data.membershipType;
+    affiliate.firstName = data.firstName;
+    affiliate.lastName = data.lastName;
+    affiliate.email = data.email;
+    affiliate.membershipType = data.membershipType;
 
-  return affiliate;
+    return affiliate;
 }
 
 export function remove(id: number): boolean {
-  const initialLength = affiliates.length;
+    const initialLength = affiliates.length;
 
-  affiliates = affiliates.filter((affiliate) => affiliate.id !== id);
+    affiliates = affiliates.filter((affiliate) => affiliate.id !== id);
 
-  return affiliates.length < initialLength;
+    return affiliates.length < initialLength;
+}
+
+export function calculateDiscount(
+    membershipType: MembershipType,
+    amount: number
+): number {
+
+    let discount = 0;
+
+    if (membershipType === "silver") {
+        discount = 0.05;
+    }
+
+    if (membershipType === "gold") {
+        discount = 0.10;
+    }
+
+    if (membershipType === "platinum") {
+        discount = 0.20;
+    }
+
+    return amount - (amount * discount);
 }

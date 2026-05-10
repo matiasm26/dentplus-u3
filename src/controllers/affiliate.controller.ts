@@ -5,7 +5,8 @@ import {
     getById,
     create,
     update,
-    remove
+    remove,
+    calculateDiscount
 } from "../models/affiliate.model";
 
 export function createForm(req: Request, res: Response) {
@@ -86,4 +87,28 @@ export function deleteAction(req: Request, res: Response) {
     remove(id);
 
     res.redirect("/affiliates");
+}
+
+export function simulateDiscount(req: Request, res: Response) {
+
+    const id = parseInt(req.params.id as string);
+
+    const affiliate = getById(id);
+
+    if (!affiliate) {
+        return res.status(404).send("Afiliado no encontrado");
+    }
+
+    const amount = Number(req.body.amount);
+
+    const finalPrice = calculateDiscount(
+        affiliate.membershipType,
+        amount
+    );
+
+    res.render("affiliates/show", {
+        affiliate,
+        finalPrice,
+        amount
+    });
 }
