@@ -1,0 +1,31 @@
+<h1>Crear afiliado</h1>
+
+<form action="/affiliates" method="POST">
+  <div>
+    <label>Nombre:</label>
+    <input type="text" name="firstName" required>
+  </div>
+
+  <div>
+    <label>Apellido:</label>
+    <input type="text" name="lastName" required>
+  </div>
+
+  <div>
+    <label>Email:</label>
+    <input type="email" name="email" required>
+  </div>
+
+  <div>
+    <label>Tipo de afiliación:</label>
+    <select name="membershipType" required>
+      <option value="silver">Silver</option>
+      <option value="gold">Gold</option>
+      <option value="platinum">Platinum</option>
+    </select>
+  </div>
+
+  <button type="submit">Guardar</button>
+</form>
+
+<a href="/affiliates">Volver al listado</a>

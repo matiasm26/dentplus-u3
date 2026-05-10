@@ -2,8 +2,24 @@ import { Request, Response } from "express";
 
 import {
     getAll,
-    getById
+    getById,
+    create
 } from "../models/affiliate.model";
+
+export function createForm(req: Request, res: Response) {
+  res.render("affiliates/create");
+}
+
+export function createAction(req: Request, res: Response) {
+  const newAffiliate = create({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    membershipType: req.body.membershipType
+  });
+
+  res.redirect(`/affiliates/${newAffiliate.id}`);
+}
 
 export function index(req: Request, res: Response) {
 
