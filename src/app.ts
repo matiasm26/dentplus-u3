@@ -2,7 +2,6 @@ import express from "express";
 import { engine } from "express-handlebars";
 import affiliateRoutes from "./routes/affiliate.routes";
 
-
 const app = express();
 const PORT = 3000;
 

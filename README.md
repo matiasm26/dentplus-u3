@@ -76,3 +76,10 @@ src/
 │   └── layouts/
 └── app.ts
 ```
+
+# Link al video
+```Parte 1 - 9 minutos
+https://www.youtube.com/watch?v=DRoflDe6YAY 
+
+```Parte 2 - 1 minuto
+https://www.youtube.com/watch?v=uL2FP_tpDWs
