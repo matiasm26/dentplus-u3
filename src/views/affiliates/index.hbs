@@ -1,0 +1,14 @@
+<h1>Afiliados DentPlus</h1>
+
+<a href="/">Volver al inicio</a>
+
+<ul>
+  {{#each affiliates}}
+    <li>
+      {{firstName}} {{lastName}} - {{membershipType}}
+      <a href="/affiliates/{{id}}">Ver detalle</a>
+    </li>
+  {{else}}
+    <li>No hay afiliados registrados.</li>
+  {{/each}}
+</ul>
