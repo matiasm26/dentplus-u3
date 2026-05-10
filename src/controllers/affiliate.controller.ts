@@ -4,22 +4,23 @@ import {
     getAll,
     getById,
     create,
-    update
+    update,
+    remove
 } from "../models/affiliate.model";
 
 export function createForm(req: Request, res: Response) {
-  res.render("affiliates/create");
+    res.render("affiliates/create");
 }
 
 export function createAction(req: Request, res: Response) {
-  const newAffiliate = create({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    membershipType: req.body.membershipType
-  });
+    const newAffiliate = create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        membershipType: req.body.membershipType
+    });
 
-  res.redirect(`/affiliates/${newAffiliate.id}`);
+    res.redirect(`/affiliates/${newAffiliate.id}`);
 }
 
 export function index(req: Request, res: Response) {
@@ -33,48 +34,56 @@ export function index(req: Request, res: Response) {
 
 export function show(req: Request, res: Response) {
 
-  const id = parseInt(req.params.id as string);
+    const id = parseInt(req.params.id as string);
 
-  const affiliate = getById(id);
+    const affiliate = getById(id);
 
-  if (!affiliate) {
-    return res.status(404).send("Afiliado no encontrado");
-  }
+    if (!affiliate) {
+        return res.status(404).send("Afiliado no encontrado");
+    }
 
-  res.render("affiliates/show", {
-    affiliate
-  });
+    res.render("affiliates/show", {
+        affiliate
+    });
 }
 
 export function editForm(req: Request, res: Response) {
 
-  const id = parseInt(req.params.id as string);
+    const id = parseInt(req.params.id as string);
 
-  const affiliate = getById(id);
+    const affiliate = getById(id);
 
-  if (!affiliate) {
-    return res.status(404).send("Afiliado no encontrado");
-  }
+    if (!affiliate) {
+        return res.status(404).send("Afiliado no encontrado");
+    }
 
-  res.render("affiliates/edit", {
-    affiliate
-  });
+    res.render("affiliates/edit", {
+        affiliate
+    });
 }
 
 export function editAction(req: Request, res: Response) {
 
-  const id = parseInt(req.params.id as string);
+    const id = parseInt(req.params.id as string);
 
-  const updatedAffiliate = update(id, {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    membershipType: req.body.membershipType
-  });
+    const updatedAffiliate = update(id, {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        membershipType: req.body.membershipType
+    });
 
-  if (!updatedAffiliate) {
-    return res.status(404).send("Afiliado no encontrado");
-  }
+    if (!updatedAffiliate) {
+        return res.status(404).send("Afiliado no encontrado");
+    }
 
-  res.redirect(`/affiliates/${id}`);
+    res.redirect(`/affiliates/${id}`);
+}
+
+export function deleteAction(req: Request, res: Response) {
+    const id = parseInt(req.params.id as string);
+
+    remove(id);
+
+    res.redirect("/affiliates");
 }

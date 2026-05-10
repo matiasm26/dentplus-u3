@@ -6,7 +6,8 @@ import {
   createForm,
   createAction,
   editForm,
-  editAction
+  editAction,
+  deleteAction
 } from "../controllers/affiliate.controller";
 
 const router = Router();
@@ -15,6 +16,8 @@ router.get("/", index);
 
 router.get("/create", createForm);
 router.post("/", createAction);
+
+router.post("/:id/delete", deleteAction);
 
 router.get("/:id/edit", editForm);
 router.post("/:id/edit", editAction);
