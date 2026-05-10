@@ -3,7 +3,8 @@ import { Request, Response } from "express";
 import {
     getAll,
     getById,
-    create
+    create,
+    update
 } from "../models/affiliate.model";
 
 export function createForm(req: Request, res: Response) {
@@ -43,4 +44,37 @@ export function show(req: Request, res: Response) {
   res.render("affiliates/show", {
     affiliate
   });
+}
+
+export function editForm(req: Request, res: Response) {
+
+  const id = parseInt(req.params.id as string);
+
+  const affiliate = getById(id);
+
+  if (!affiliate) {
+    return res.status(404).send("Afiliado no encontrado");
+  }
+
+  res.render("affiliates/edit", {
+    affiliate
+  });
+}
+
+export function editAction(req: Request, res: Response) {
+
+  const id = parseInt(req.params.id as string);
+
+  const updatedAffiliate = update(id, {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    membershipType: req.body.membershipType
+  });
+
+  if (!updatedAffiliate) {
+    return res.status(404).send("Afiliado no encontrado");
+  }
+
+  res.redirect(`/affiliates/${id}`);
 }
