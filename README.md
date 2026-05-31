@@ -1,86 +1,159 @@
-# DentPlus MVC
+# DentPlus - Evaluación Unidad 3
 
-Sistema de afiliados desarrollado con:
+## Descripción
 
-- Node.js
-- Express
-- TypeScript
-- Express Handlebars
-- Arquitectura MVC
+DentPlus es una aplicación web desarrollada con arquitectura MVC utilizando Express, TypeScript y Handlebars. El sistema permite gestionar afiliados mediante operaciones CRUD, incorporando validaciones, autenticación de usuarios, persistencia en PostgreSQL y soporte para Docker.
 
 ---
 
-# Funcionalidades
+## Tecnologías utilizadas
 
-- Listar afiliados
-- Ver detalle de afiliado
-- Crear afiliado
-- Editar afiliado
-- Eliminar afiliado
-- Simulador de descuentos
-
----
-
-# Tecnologías utilizadas
-
-- Node.js
-- Express
-- TypeScript
-- Express Handlebars
-- Git
+* Node.js
+* TypeScript
+* Express
+* Express Handlebars
+* PostgreSQL
+* Prisma ORM
+* Zod
+* bcryptjs
+* express-session
+* Docker
+* Docker Compose
 
 ---
 
-# Instalación
+## Instalación y ejecución local
 
-Instalar dependencias:
+### 1. Clonar repositorio
+
+```bash
+git clone https://github.com/matiasm26/dentplus-u3.git
+cd dentplus-u3
+```
+
+### 2. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-# Ejecutar proyecto
+### 3. Configurar variables de entorno
+
+Crear un archivo `.env` basado en `.env.example`.
+
+Ejemplo:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/dentplus_db"
+SESSION_SECRET="dentplus-secret"
+```
+
+### 4. Ejecutar migraciones Prisma
+
+```bash
+npx prisma migrate dev
+```
+
+### 5. Iniciar aplicación
 
 ```bash
 npm run dev
 ```
 
-# Abrir en el navegador
+La aplicación estará disponible en:
 
 ```text
 http://localhost:3000
 ```
 
-# Arquitectura MVC
-- Model
-    Encargado del manejo de datos y lógica de negocio.
+---
 
-- Controller
-    Coordina las peticiones HTTP y conecta Model con Views.
+## Uso con Docker
 
-- Routes
-    Define las rutas de la aplicación.
+### Levantar PostgreSQL mediante Docker
 
-- Views
-    Muestra la interfaz utilizando Handlebars.
-
-# Estructura del proyecto
-
-```text
-src/
-├── controllers/
-├── models/
-├── routes/
-├── views/
-│   ├── affiliates/
-│   └── layouts/
-└── app.ts
+```bash
+docker compose up -d
 ```
 
-# Link al video
-- Parte 1 - 9 minutos:
-https://www.youtube.com/watch?v=DRoflDe6YAY
+Verificar estado:
 
+```bash
+docker compose ps
+```
 
-- Parte 2 - 1 minuto:
-https://www.youtube.com/watch?v=uL2FP_tpDWs
+Detener contenedor:
+
+```bash
+docker compose down
+```
+
+---
+
+## Funcionalidades implementadas
+
+### Validaciones con Zod
+
+* Validación de formularios de creación y edición.
+* Mensajes de error inline.
+* Repoblado de formularios cuando existen errores.
+
+### Autenticación
+
+* Registro de usuarios.
+* Inicio de sesión.
+* Cierre de sesión.
+* Contraseñas protegidas con bcryptjs.
+* Protección de rutas mediante sesiones.
+
+### Aislamiento de datos
+
+Cada usuario solo puede visualizar y administrar sus propios afiliados.
+
+El identificador del usuario se obtiene desde:
+
+```ts
+req.session.userId
+```
+
+y no desde formularios enviados por el cliente.
+
+### Persistencia
+
+* PostgreSQL
+* Prisma ORM
+* Migraciones versionadas
+
+---
+
+## Decisión de arquitectura
+
+bcryptjs se utiliza dentro del Controller y no en el Model.
+
+Motivo:
+
+El Controller contiene la lógica de negocio de la aplicación. El Model solamente debe encargarse de acceder y persistir datos.
+
+El proceso de hashear contraseñas corresponde a una regla de negocio relacionada con la seguridad, por lo que debe permanecer en la capa Controller.
+
+---
+
+## Uso de Inteligencia Artificial
+
+Durante el desarrollo del proyecto se utilizó ChatGPT como herramienta de apoyo para:
+
+* Resolver dudas sobre Prisma y PostgreSQL.
+* Comprender la configuración de Docker.
+* Revisar errores de TypeScript.
+* Comprender mejores prácticas de arquitectura MVC.
+* Apoyar la implementación de validaciones con Zod.
+
+Todo el código fue revisado, probado y comprendido antes de ser incorporado al proyecto.
+
+---
+
+## Autor
+
+Matías Martínez
+
+Evaluación Unidad 3 - Desarrollo de Software Web I
