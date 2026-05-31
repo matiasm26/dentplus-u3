@@ -1,6 +1,10 @@
 import express from "express";
+import session from "express-session";
 import { engine } from "express-handlebars";
+
 import affiliateRoutes from "./routes/affiliate.routes";
+import authRoutes from "./routes/auth.routes";
+import { requireAuth } from "./middleware/requireAuth";
 
 const app = express();
 const PORT = 3000;
@@ -11,7 +15,17 @@ app.set("views", "./src/views");
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/affiliates", affiliateRoutes);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "dentplus-secret",
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+app.use("/", authRoutes);
+
+app.use("/affiliates", requireAuth, affiliateRoutes);
 
 app.get("/", (req, res) => {
   res.render("home", {
