@@ -23,6 +23,11 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  res.locals.userId = req.session.userId;
+  next();
+});
+
 app.use("/", authRoutes);
 
 app.use("/affiliates", requireAuth, affiliateRoutes);

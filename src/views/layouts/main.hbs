@@ -19,14 +19,9 @@
         <a class="btn btn-outline-light btn-sm" href="/affiliates">
           Afiliados
         </a>
-
-        <form action="/logout" method="POST" class="m-0">
-          <button class="btn btn-outline-warning btn-sm" type="submit">
-            Cerrar sesión
-          </button>
-        </form>
+        {{#if userId}} <form action="/logout" method="POST" class="m-0"> <button class="btn btn-outline-warning btn-sm"
+            type="submit"> Cerrar sesión </button> </form> {{/if}}
       </div>
-    </div>
   </nav>
 
   <main class="container">
