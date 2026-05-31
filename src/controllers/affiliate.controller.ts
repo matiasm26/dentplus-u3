@@ -3,128 +3,136 @@ import { affiliateSchema } from "../schemas/affiliate.schema";
 import { formatZodErrors } from "../lib/parseError";
 
 import {
-    getAll,
-    getById,
-    create,
-    update,
-    remove,
-    calculateDiscount
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+  calculateDiscount
 } from "../models/affiliate.model";
 
 export function createForm(req: Request, res: Response) {
-    res.render("affiliates/create");
+  res.render("affiliates/create");
 }
 
-export function createAction(req: Request, res: Response) {
-    const result = affiliateSchema.safeParse(req.body);
+export async function createAction(req: Request, res: Response) {
+  const result = affiliateSchema.safeParse(req.body);
 
-    if (!result.success) {
-        return res.render("affiliates/create", {
-            errors: formatZodErrors(result.error),
-            values: req.body
-        });
-    }
-
-    const newAffiliate = create(result.data);
-
-    res.redirect(`/affiliates/${newAffiliate.id}`);
-}
-
-export function index(req: Request, res: Response) {
-
-    const affiliates = getAll();
-
-    res.render("affiliates/index", {
-        affiliates
+  if (!result.success) {
+    return res.render("affiliates/create", {
+      errors: formatZodErrors(result.error),
+      values: req.body
     });
+  }
+
+  const userId = req.session.userId!;
+
+  const newAffiliate = await create({
+    ...result.data,
+    userId
+  });
+
+  res.redirect(`/affiliates/${newAffiliate.id}`);
 }
 
-export function show(req: Request, res: Response) {
+export async function index(req: Request, res: Response) {
+  const userId = req.session.userId!;
 
-    const id = parseInt(req.params.id as string);
+  const affiliates = await getAll(userId);
 
-    const affiliate = getById(id);
+  res.render("affiliates/index", {
+    affiliates
+  });
+}
 
-    if (!affiliate) {
-        return res.status(404).send("Afiliado no encontrado");
-    }
+export async function show(req: Request, res: Response) {
+  const id = parseInt(req.params.id as string);
+  const userId = req.session.userId!;
 
-    res.render("affiliates/show", {
-        affiliate
+  const affiliate = await getById(id, userId);
+
+  if (!affiliate) {
+    return res.status(404).send("Afiliado no encontrado");
+  }
+
+  res.render("affiliates/show", {
+    affiliate
+  });
+}
+
+export async function editForm(req: Request, res: Response) {
+  const id = parseInt(req.params.id as string);
+  const userId = req.session.userId!;
+
+  const affiliate = await getById(id, userId);
+
+  if (!affiliate) {
+    return res.status(404).send("Afiliado no encontrado");
+  }
+
+  res.render("affiliates/edit", {
+    affiliate
+  });
+}
+
+export async function editAction(req: Request, res: Response) {
+  const id = parseInt(req.params.id as string);
+  const userId = req.session.userId!;
+
+  const affiliate = await getById(id, userId);
+
+  if (!affiliate) {
+    return res.status(404).send("Afiliado no encontrado");
+  }
+
+  const result = affiliateSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.render("affiliates/edit", {
+      affiliate,
+      errors: formatZodErrors(result.error),
+      values: req.body
     });
+  }
+
+  const updatedAffiliate = await update(id, userId, result.data);
+
+  if (updatedAffiliate.count === 0) {
+    return res.status(404).send("Afiliado no encontrado");
+  }
+
+  res.redirect(`/affiliates/${id}`);
 }
 
-export function editForm(req: Request, res: Response) {
+export async function deleteAction(req: Request, res: Response) {
+  const id = parseInt(req.params.id as string);
+  const userId = req.session.userId!;
 
-    const id = parseInt(req.params.id as string);
+  await remove(id, userId);
 
-    const affiliate = getById(id);
-
-    if (!affiliate) {
-        return res.status(404).send("Afiliado no encontrado");
-    }
-
-    res.render("affiliates/edit", {
-        affiliate
-    });
+  res.redirect("/affiliates");
 }
 
-export function editAction(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string);
+export async function simulateDiscount(req: Request, res: Response) {
+  const id = parseInt(req.params.id as string);
+  const userId = req.session.userId!;
 
-    const affiliate = getById(id);
+  const affiliate = await getById(id, userId);
 
-    if (!affiliate) {
-        return res.status(404).send("Afiliado no encontrado");
-    }
+  if (!affiliate) {
+    return res.status(404).send("Afiliado no encontrado");
+  }
 
-    const result = affiliateSchema.safeParse(req.body);
+  const amount = Number(req.body.amount);
 
-    if (!result.success) {
-        return res.render("affiliates/edit", {
-            affiliate,
-            errors: formatZodErrors(result.error),
-            values: req.body
-        });
-    }
+  const finalPrice = calculateDiscount(
+    affiliate.membershipType as "silver" | "gold" | "platinum",
+    amount
+  );
 
-    const updatedAffiliate = update(id, result.data);
-
-    if (!updatedAffiliate) {
-        return res.status(404).send("Afiliado no encontrado");
-    }
-
-    res.redirect(`/affiliates/${id}`);
-}
-
-export function deleteAction(req: Request, res: Response) {
-    const id = parseInt(req.params.id as string);
-
-    remove(id);
-
-    res.redirect("/affiliates");
-}
-
-export function simulateDiscount(req: Request, res: Response) {
-
-    const id = parseInt(req.params.id as string);
-
-    const affiliate = getById(id);
-
-    if (!affiliate) {
-        return res.status(404).send("Afiliado no encontrado");
-    }
-
-    const amount = Number(req.body.amount);
-
-    const finalPrice = calculateDiscount(
-        affiliate.membershipType,
-        amount
-    );
-
-    res.render("affiliates/show", {
-        affiliate,
-        finalPrice,
-        amount
-    });
+  res.render("affiliates/show", {
+    affiliate,
+    finalPrice,
+    amount
+  });
 }

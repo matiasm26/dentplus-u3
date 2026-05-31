@@ -1,91 +1,76 @@
+import prisma from "../lib/prisma";
+
 export type MembershipType = "silver" | "gold" | "platinum";
 
-export interface Affiliate {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    membershipType: MembershipType;
+export interface AffiliateInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  membershipType: MembershipType;
 }
 
-let affiliates: Affiliate[] = [
-    {
-        id: 1,
-        firstName: "Ana",
-        lastName: "Pérez",
-        email: "ana@correo.com",
-        membershipType: "silver"
+export function getAll(userId: number) {
+  return prisma.affiliate.findMany({
+    where: { userId },
+    orderBy: { id: "asc" }
+  });
+}
+
+export function getById(id: number, userId: number) {
+  return prisma.affiliate.findFirst({
+    where: {
+      id,
+      userId
+    }
+  });
+}
+
+export function create(data: AffiliateInput & { userId: number }) {
+  return prisma.affiliate.create({
+    data
+  });
+}
+
+export function update(
+  id: number,
+  userId: number,
+  data: AffiliateInput
+) {
+  return prisma.affiliate.updateMany({
+    where: {
+      id,
+      userId
     },
-    {
-        id: 2,
-        firstName: "Carlos",
-        lastName: "Muñoz",
-        email: "carlos@correo.com",
-        membershipType: "gold"
+    data
+  });
+}
+
+export function remove(id: number, userId: number) {
+  return prisma.affiliate.deleteMany({
+    where: {
+      id,
+      userId
     }
-];
-
-let nextId = 3;
-
-export function getAll(): Affiliate[] {
-    return affiliates;
-}
-
-export function getById(id: number): Affiliate | undefined {
-    return affiliates.find((affiliate) => affiliate.id === id);
-}
-
-export function create(data: Omit<Affiliate, "id">): Affiliate {
-    const newAffiliate: Affiliate = {
-        id: nextId++,
-        ...data
-    };
-
-    affiliates.push(newAffiliate);
-    return newAffiliate;
-}
-
-export function update(id: number, data: Omit<Affiliate, "id">): Affiliate | undefined {
-    const affiliate = getById(id);
-
-    if (!affiliate) {
-        return undefined;
-    }
-
-    affiliate.firstName = data.firstName;
-    affiliate.lastName = data.lastName;
-    affiliate.email = data.email;
-    affiliate.membershipType = data.membershipType;
-
-    return affiliate;
-}
-
-export function remove(id: number): boolean {
-    const initialLength = affiliates.length;
-
-    affiliates = affiliates.filter((affiliate) => affiliate.id !== id);
-
-    return affiliates.length < initialLength;
+  });
 }
 
 export function calculateDiscount(
-    membershipType: MembershipType,
-    amount: number
+  membershipType: MembershipType,
+  amount: number
 ): number {
+  let discount = 0;
 
-    let discount = 0;
+  if (membershipType === "silver") {
+    discount = 0.05;
+  }
 
-    if (membershipType === "silver") {
-        discount = 0.05;
-    }
+  if (membershipType === "gold") {
+    discount = 0.10;
+  }
 
-    if (membershipType === "gold") {
-        discount = 0.10;
-    }
+  if (membershipType === "platinum") {
+    discount = 0.20;
+  }
 
-    if (membershipType === "platinum") {
-        discount = 0.20;
-    }
-
-    return amount - (amount * discount);
+  return amount - amount * discount;
 }
