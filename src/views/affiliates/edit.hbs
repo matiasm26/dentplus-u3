@@ -1,39 +1,67 @@
 <h1 class="mb-3">Editar afiliado</h1>
 
 <form action="/affiliates/{{affiliate.id}}/edit" method="POST">
-    <div class="mb-3">
-        <label class="form-label">Nombre:</label>
+  <div class="mb-3">
+    <label class="form-label">Nombre:</label>
+    <input
+      class="form-control {{#if errors.firstName}}is-invalid{{/if}}"
+      type="text"
+      name="firstName"
+      value="{{#if values.firstName}}{{values.firstName}}{{else}}{{affiliate.firstName}}{{/if}}"
+    >
+    {{#if errors.firstName}}
+      <div class="invalid-feedback">{{errors.firstName}}</div>
+    {{/if}}
+  </div>
 
-        <input class="form-control" type="text" name="firstName" value="{{affiliate.firstName}}" required>
-    </div>
+  <div class="mb-3">
+    <label class="form-label">Apellido:</label>
+    <input
+      class="form-control {{#if errors.lastName}}is-invalid{{/if}}"
+      type="text"
+      name="lastName"
+      value="{{#if values.lastName}}{{values.lastName}}{{else}}{{affiliate.lastName}}{{/if}}"
+    >
+    {{#if errors.lastName}}
+      <div class="invalid-feedback">{{errors.lastName}}</div>
+    {{/if}}
+  </div>
 
-    <div class="mb-3">
-        <label class="form-label">Apellido:</label>
+  <div class="mb-3">
+    <label class="form-label">Email:</label>
+    <input
+      class="form-control {{#if errors.email}}is-invalid{{/if}}"
+      type="text"
+      name="email"
+      value="{{#if values.email}}{{values.email}}{{else}}{{affiliate.email}}{{/if}}"
+    >
+    {{#if errors.email}}
+      <div class="invalid-feedback">{{errors.email}}</div>
+    {{/if}}
+  </div>
 
-        <input class="form-control" type="text" name="lastName" value="{{affiliate.lastName}}" required>
-    </div>
+  <div class="mb-3">
+    <label class="form-label">Tipo afiliación:</label>
+    <select
+      class="form-select {{#if errors.membershipType}}is-invalid{{/if}}"
+      name="membershipType"
+    >
+      <option value="">Seleccione una opción</option>
+      <option value="silver">Silver</option>
+      <option value="gold">Gold</option>
+      <option value="platinum">Platinum</option>
+    </select>
 
-    <div class="mb-3">
-        <label class="form-label">Email:</label>
+    {{#if errors.membershipType}}
+      <div class="invalid-feedback">{{errors.membershipType}}</div>
+    {{/if}}
+  </div>
 
-        <input class="form-control" type="email" name="email" value="{{affiliate.email}}" required>
-    </div>
+  <button class="btn btn-primary" type="submit">
+    Guardar cambios
+  </button>
 
-    <div class="mb-3">
-        <label class="form-label">Tipo afiliación:</label>
-
-        <select class="form-select" name="membershipType">
-            <option value="silver">Silver</option>
-            <option value="gold">Gold</option>
-            <option value="platinum">Platinum</option>
-        </select>
-    </div>
-
-    <button class="btn btn-primary" type="submit">
-        Guardar cambios
-    </button>
-
-    <a class="btn btn-secondary" href="/affiliates/{{affiliate.id}}">
-        Volver al detalle
-    </a>
+  <a class="btn btn-secondary" href="/affiliates/{{affiliate.id}}">
+    Volver al detalle
+  </a>
 </form>

@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import { affiliateSchema } from "../schemas/affiliate.schema";
+import { formatZodErrors } from "../lib/parseError";
 
 import {
     getAll,
@@ -14,12 +16,16 @@ export function createForm(req: Request, res: Response) {
 }
 
 export function createAction(req: Request, res: Response) {
-    const newAffiliate = create({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        membershipType: req.body.membershipType
-    });
+    const result = affiliateSchema.safeParse(req.body);
+
+    if (!result.success) {
+        return res.render("affiliates/create", {
+            errors: formatZodErrors(result.error),
+            values: req.body
+        });
+    }
+
+    const newAffiliate = create(result.data);
 
     res.redirect(`/affiliates/${newAffiliate.id}`);
 }
@@ -64,15 +70,25 @@ export function editForm(req: Request, res: Response) {
 }
 
 export function editAction(req: Request, res: Response) {
-
     const id = parseInt(req.params.id as string);
 
-    const updatedAffiliate = update(id, {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        membershipType: req.body.membershipType
-    });
+    const affiliate = getById(id);
+
+    if (!affiliate) {
+        return res.status(404).send("Afiliado no encontrado");
+    }
+
+    const result = affiliateSchema.safeParse(req.body);
+
+    if (!result.success) {
+        return res.render("affiliates/edit", {
+            affiliate,
+            errors: formatZodErrors(result.error),
+            values: req.body
+        });
+    }
+
+    const updatedAffiliate = update(id, result.data);
 
     if (!updatedAffiliate) {
         return res.status(404).send("Afiliado no encontrado");

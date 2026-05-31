@@ -3,27 +3,58 @@
 <form action="/affiliates" method="POST">
   <div class="mb-3">
     <label class="form-label">Nombre:</label>
-    <input class="form-control" type="text" name="firstName" required>
+    <input
+      class="form-control {{#if errors.firstName}}is-invalid{{/if}}"
+      type="text"
+      name="firstName"
+      value="{{values.firstName}}"
+    >
+    {{#if errors.firstName}}
+      <div class="invalid-feedback">{{errors.firstName}}</div>
+    {{/if}}
   </div>
 
   <div class="mb-3">
     <label class="form-label">Apellido:</label>
-    <input class="form-control" type="text" name="lastName" required>
+    <input
+      class="form-control {{#if errors.lastName}}is-invalid{{/if}}"
+      type="text"
+      name="lastName"
+      value="{{values.lastName}}"
+    >
+    {{#if errors.lastName}}
+      <div class="invalid-feedback">{{errors.lastName}}</div>
+    {{/if}}
   </div>
 
   <div class="mb-3">
     <label class="form-label">Email:</label>
-    <input class="form-control" type="email" name="email" required>
+    <input
+      class="form-control {{#if errors.email}}is-invalid{{/if}}"
+      type="email"
+      name="email"
+      value="{{values.email}}"
+    >
+    {{#if errors.email}}
+      <div class="invalid-feedback">{{errors.email}}</div>
+    {{/if}}
   </div>
 
   <div class="mb-3">
     <label class="form-label">Tipo de afiliación:</label>
-
-    <select class="form-select" name="membershipType" required>
+    <select
+      class="form-select {{#if errors.membershipType}}is-invalid{{/if}}"
+      name="membershipType"
+    >
+      <option value="">Seleccione una opción</option>
       <option value="silver">Silver</option>
       <option value="gold">Gold</option>
       <option value="platinum">Platinum</option>
     </select>
+
+    {{#if errors.membershipType}}
+      <div class="invalid-feedback">{{errors.membershipType}}</div>
+    {{/if}}
   </div>
 
   <button class="btn btn-primary" type="submit">Guardar</button>
